@@ -4,34 +4,48 @@
 
 using namespace std;
 
-int main() {
-	int N, M;
+int N, M;
+vector<int> A;
+int cnt = 0;
+int start_idx = 0;
+int end_idx;
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
 	cin >> N >> M;
-	
-	vector<int> A;
-	for (int i = 0; i < N; i++) {
+	end_idx = N - 1;
+
+	for (int i = 0; i < N; i++)
+	{
 		int tmp;
 		cin >> tmp;
 		A.push_back(tmp);
 	}
+
 	sort(A.begin(), A.end());
-	
-	int start_idx = 0, end_idx = N - 1;
-	int sum = 0;
-	int cnt = 0;
-	
-	while (start_idx < end_idx) {
-		int tmp = A[start_idx] + A[end_idx];
-		if (tmp == M) {
+
+	while (end_idx > start_idx)
+	{
+		int sum_of_idx = A[start_idx] + A[end_idx];
+		if (sum_of_idx == M)
+		{
 			cnt++;
-			start_idx++;
 			end_idx--;
 		}
-		else if (tmp > M) end_idx--;
-		else start_idx++;
+		else if (sum_of_idx > M)
+		{
+			end_idx--;
+		}
+		else
+		{
+			start_idx++;
+		}
 	}
-	
+
 	cout << cnt << '\n';
-	
-	return 0;
+    return 0;
 }
