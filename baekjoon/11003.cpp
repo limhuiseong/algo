@@ -3,8 +3,10 @@
 
 using namespace std;
 
+typedef pair<int, int> Node;
+
 int N, L;
-deque<pair<int, int>> my_deque;
+deque<Node> my_deque;
 
 int main()
 {
@@ -16,18 +18,18 @@ int main()
 
     for (int i = 0; i < N; i++)
     {
-        int tmp;
-        cin >> tmp;
+        int now;
+        cin >> now;
 
-        while (my_deque.size() && my_deque.back().first > tmp)
+        while (my_deque.size() && my_deque.back().first > now)
         {
             my_deque.pop_back();
         }
-        my_deque.push_back(pair<int, int>(tmp, i));
+        my_deque.push_back(Node(now, i));
+
         if (my_deque.front().second <= i - L)
-        {
-            my_deque.pop_front();
-        }
+            my_deque.pop_front();      
+
         cout << my_deque.front().first << ' ';
     }
 
