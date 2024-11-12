@@ -2,18 +2,19 @@
 
 using namespace std;
 
-int S, P;
+int S;
+int P;
 string DNA;
-int condition[4] = {0};
-// A, C, G, T
-int cnt = 0;
+int condition[4];
+int current[4];
+int ans = 0;
 
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-    
+
     cin >> S >> P;
     cin >> DNA;
     for (int i = 0; i < 4; i++)
@@ -21,42 +22,83 @@ int main()
         cin >> condition[i];
     }
 
-    int start_idx = 0;
-    int end_idx = start_idx + P - 1;
-
-    int A, C, G, T;
-    A = C = G = T = 0;
-
     for (int i = 0; i < P; i++)
     {
-        if (DNA[i] == 'A') A++;
-        else if (DNA[i] == 'C') C++;
-        else if (DNA[i] == 'G') G++;
-        else T++;
+        switch (DNA[i])
+        {
+            case 'A':
+                current[0]++;
+                break;
+            case 'C':
+                current[1]++;
+                break;
+            case 'G':
+                current[2]++;
+                break;
+            case 'T':
+                current[3]++;
+                break;
+        }
     }
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (current[i] < condition[i])
+            break;
+        if (i == 3) ans++;
+    }
+
+
+    int start_index = 1;
+    int end_index = P;
 
     while (1)
     {
-        if (A >= condition[0] && C >= condition[1] && G >= condition[2] && T >= condition[3])
+        if (end_index == S)
+            break;
+        char next = DNA[end_index];
+        char previous = DNA[start_index - 1];
+        switch (next)
         {
-            cnt++;
+            case 'A':
+                current[0]++;
+                break;
+            case 'C':
+                current[1]++;
+                break;
+            case 'G':
+                current[2]++;
+                break;
+            case 'T':
+                current[3]++;
+                break;
+        }
+        switch (previous)
+        {
+            case 'A':
+                current[0]--;
+                break;
+            case 'C':
+                current[1]--;
+                break;
+            case 'G':
+                current[2]--;
+                break;
+            case 'T':
+                current[3]--;
+                break;
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (current[i] < condition[i])
+                break;
+            if (i == 3) ans++;
         }
 
-        if (DNA[start_idx] == 'A') A--;
-        else if (DNA[start_idx] == 'C') C--;
-        else if (DNA[start_idx] == 'G') G--;
-        else T--;
-
-        if (DNA[end_idx + 1] == 'A') A++;
-        else if (DNA[end_idx + 1] == 'C') C++;
-        else if (DNA[end_idx + 1] == 'G') G++;
-        else T++;
-
-        start_idx++;
-        if (++end_idx == S) 
-            break;
+        start_index++;
+        end_index++;
     }
 
-    cout << cnt << '\n';
+    cout << ans;
     return 0;
 }
