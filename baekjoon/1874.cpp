@@ -1,14 +1,29 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
 int n;
-vector<int> ar;
-stack<int> st;
-int dish = 1;
-string ans = "";
+vector<int> my_stack;
+vector<int> numbers;
+vector<int> arr;
+string ans;
+bool isNo = false;
+
+void push(int a)
+{   
+    ans += "+\n";
+    my_stack.push_back(a);
+}
+
+int pop()
+{
+    ans += "-\n";
+    int tmp = my_stack.back();
+    my_stack.pop_back();
+
+    return tmp;
+}
 
 int main()
 {
@@ -17,44 +32,49 @@ int main()
     cout.tie(NULL);
 
     cin >> n;
+
+    for (int i = n; i >= 1 ; i--)
+    {   
+        numbers.push_back(i);
+    }
+
     for (int i = 0; i < n; i++)
     {
         int tmp;
         cin >> tmp;
-        ar.push_back(tmp);
+        arr.push_back(tmp);
     }
+
+    push(numbers.back());
+    numbers.pop_back();
 
     for (int i = 0; i < n; i++)
     {
-        int target = ar[i];
-        if (st.size() && target == st.top())
+        int target = arr[i];
+        if (my_stack.back() > target)
         {
-            st.pop();
-            ans += "-\n";
-            continue;
-        }
-        else if (st.size() && st.top() > target)
-        {
+            isNo = true;
             cout << "NO\n";
-            ans = "";
             break;
         }
-        if (!st.size())
+        while (target != my_stack.back())
         {
-            st.push(dish++);
-            ans += "+\n";
+            if (!numbers.empty())
+            {
+                push(numbers.back());
+                numbers.pop_back();
+            }
+            else
+            {
+                isNo = true;
+                cout << "NO\n";
+                break;
+            }
         }
-        while (st.size() && st.top() != target)
-        {
-            st.push(dish++);
-            ans += "+\n";
-        }
-        if (st.size())
-            st.pop();
-        ans += "-\n";
+        pop();
     }
 
-    cout << ans;
-
-    return 0;
+    if (!isNo)
+        cout << ans;
+    
 }
